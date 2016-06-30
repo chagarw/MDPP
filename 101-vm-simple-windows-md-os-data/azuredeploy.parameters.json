@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "adminUsername": {
-            "value": "userName"
+            "value": "chagarw"
         },
         "adminPassword": {
-            "value": "password"
+            "value": "abcd1234!S"
         }
    }
 }

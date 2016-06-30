@@ -209,7 +209,7 @@
                 "dataDisks": [
                 {
                     "lun": 2,
-                    "name": "managedDataDisk",
+                    "name": "myManagedDataDisk",
                     "createOption": "attach",
                     "managedDisk":
                     {
@@ -219,7 +219,7 @@
                 ,
                 {
                     "lun": 3,
-                    "name": "managedDataDisk1",
+                    "name": "myManagedDataDisk1",
                     "createOption": "attach",
                     "managedDisk":
                     {
@@ -241,7 +241,8 @@
         ,
         "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]",
-        "Microsoft.Compute/disks/myManagedDataDisk"
+        "Microsoft.Compute/disks/myManagedDataDisk",
+        "Microsoft.Compute/disks/myManagedDataDisk1"
         ]
     }
     ,
@@ -255,14 +256,14 @@
             "creationData":
             {
                 "createOption" : "Copy",
-				"sourceUri" : "[resourceId('Microsoft.Compute/disks','myManagedDataDisk')]"
+		"sourceUri" : "[resourceId('Microsoft.Compute/disks','myManagedDataDisk')]"
             }
             		   
         },
 		"dependsOn": [
 		    "[concat('Microsoft.Compute/disks/', 'myManagedDataDisk')]",
-			"[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+		    "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
 		]
-    }
+    	}
     ]
 }

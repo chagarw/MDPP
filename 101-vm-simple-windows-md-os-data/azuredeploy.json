@@ -209,7 +209,7 @@
                 "dataDisks": [
                 {
                     "lun": 2,
-                    "name": "managedDataDisk",
+                    "name": "myManagedDataDisk",
                     "createOption": "attach",
                     "managedDisk":
                     {
@@ -219,7 +219,7 @@
                 ,
                 {
                     "lun": 3,
-                    "name": "managedDataDisk1",
+                    "name": "myManagedDataDisk1",
                     "createOption": "attach",
                     "managedDisk":
                     {
