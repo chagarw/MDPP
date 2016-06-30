@@ -1,0 +1,305 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters":
+    {
+        "adminUsername":
+        {
+            "type": "string",
+            "metadata":
+            {
+                "description": "Username for the Virtual Machine."
+            }
+        }
+        ,
+        "adminPassword":
+        {
+            "type": "securestring",
+            "metadata":
+            {
+                "description": "Password for the Virtual Machine."
+            }
+        }
+        ,
+        "dnsLabelPrefix":
+        {
+            "type": "string",
+            "metadata":
+            {
+                "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+            }
+        }
+        ,
+        "windowsOSVersion":
+        {
+            "type": "string",
+            "defaultValue": "2012-R2-Datacenter",
+            "allowedValues": [
+            "2008-R2-SP1",
+            "2012-Datacenter",
+            "2012-R2-Datacenter"
+            ],
+            "metadata":
+            {
+                "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version. Allowed values: 2008-R2-SP1, 2012-Datacenter, 2012-R2-Datacenter."
+            }
+        }
+    }
+    ,
+    "variables":
+    {
+        "location": "[resourceGroup().location]",
+        "imagePublisher": "MicrosoftWindowsServer",
+        "imageOffer": "WindowsServer",
+        "OSDiskName": "osdiskforwindowssimple",
+        "nicName": "mynic",
+        "addressPrefix": "10.0.0.0/8",
+        "subnetName": "Subnet11",
+        "subnetPrefix": "10.0.0.0/16",
+        "storageAccountType": "Standard_LRS",
+        "publicIPAddressName": "myip",
+        "publicIPAddressType": "Dynamic",
+        "vmStorageAccountContainerName": "vhds",
+        "vmName": "myManagedDiskVM",
+        "vmSize": "Standard_A1",
+        "virtualNetworkName": "myvnet",
+        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+        "apiVersion": "2015-06-15",
+        "computeResouresApiVersion" : "2016-04-30-preview"
+    }
+    ,
+    "resources": [
+    {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "name": "[concat(variables('publicIPAddressName'), '1')]",
+        "location": "[variables('location')]",
+        "properties":
+        {
+            "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+            "dnsSettings":
+            {
+                "domainNameLabel": "[concat(parameters('dnsLabelPrefix'), '1')]"
+            }
+        }
+    },
+	 {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "name": "[concat(variables('publicIPAddressName'), '2')]",
+        "location": "[variables('location')]",
+        "properties":
+        {
+            "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+            "dnsSettings":
+            {
+                "domainNameLabel": "[concat(parameters('dnsLabelPrefix'), '2')]"
+            }
+        }
+    }
+    ,
+    {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[variables('virtualNetworkName')]",
+        "location": "[variables('location')]",
+        "properties":
+        {
+            "addressSpace":
+            {
+                "addressPrefixes": [
+                "[variables('addressPrefix')]"
+                ]
+            }
+            ,
+            "subnets": [
+            {
+                "name": "[variables('subnetName')]",
+                "properties":
+                {
+                    "addressPrefix": "[variables('subnetPrefix')]"
+                }
+            }
+            ]
+        }
+    }
+    ,
+    {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[concat(variables('nicName'), '1')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'), '1')]",
+        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+        ],
+        "properties":
+        {
+            "ipConfigurations": [
+            {
+                "name": "ipconfig1",
+                "properties":
+                {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "publicIPAddress":
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('publicIPAddressName'), '1'))]"
+                    }
+                    ,
+                    "subnet":
+                    {
+                        "id": "[variables('subnetRef')]"
+                    }
+                }
+            }
+            ]
+        }
+    }
+    ,
+    {
+        "apiVersion": "[variables('apiVersion')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[concat(variables('nicName'), '2')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'), '2')]",
+        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+        ],
+        "properties":
+        {
+            "ipConfigurations": [
+            {
+                "name": "ipconfig1",
+                "properties":
+                {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "publicIPAddress":
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('publicIPAddressName'), '2'))]"
+                    }
+                    ,
+                    "subnet":
+                    {
+                        "id": "[variables('subnetRef')]"
+                    }
+                }
+            }
+            ]
+        }
+    }
+    ,
+    {
+        "type": "Microsoft.Compute/availabilitySets",
+        "name": "availabilitySet1",
+        "apiVersion": "[variables('computeResouresApiVersion')]",
+        "location": "[variables('location')]",
+        "properties":
+        {
+            "platformFaultDomainCount": "2",
+            "platformUpdateDomainCount": "2",
+		"managed" : "true"
+        }
+    }
+    ,
+    {
+        "apiVersion": "[variables('computeResouresApiVersion')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[concat(variables('vmName'), '1')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
+		 ],
+        "properties":
+        {
+            "availabilitySet":
+            {
+                "id": "[resourceId('Microsoft.Compute/availabilitySets', 'availabilitySet1')]"
+            }
+            ,
+            "hardwareProfile":
+            {
+                "vmSize": "[variables('vmSize')]"
+            }
+            ,
+            "osProfile":
+            {
+                "computerName": "[variables('vmName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]"
+            }
+            ,
+            "storageProfile":
+            {
+                "imageReference":
+                {
+                    "publisher": "[variables('imagePublisher')]",
+                    "offer": "[variables('imageOffer')]",
+                    "sku": "[parameters('windowsOSVersion')]",
+                    "version": "latest"
+                }
+            }
+            ,
+            "networkProfile":
+            {
+                "networkInterfaces": [
+                {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'), '1'))]"
+                }
+                ]
+            }
+        }
+    }
+    ,
+    {
+        "apiVersion": "[variables('computeResouresApiVersion')]",
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[concat(variables('vmName'), '2')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]",
+        ],
+        "properties":
+        {
+            "availabilitySet":
+            {
+                "id": "[resourceId('Microsoft.Compute/availabilitySets', 'availabilitySet1')]"
+            }
+            ,
+            "hardwareProfile":
+            {
+                "vmSize": "[variables('vmSize')]"
+            }
+            ,
+            "osProfile":
+            {
+                "computerName": "[variables('vmName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]"
+            }
+            ,
+            "storageProfile":
+            {
+                "imageReference":
+                {
+                    "publisher": "[variables('imagePublisher')]",
+                    "offer": "[variables('imageOffer')]",
+                    "sku": "[parameters('windowsOSVersion')]",
+                    "version": "latest"
+                }
+            }
+            ,
+            "networkProfile":
+            {
+                "networkInterfaces": [
+                {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicName'), '2'))]"
+                }
+                ]
+            }
+        }
+    }
+    ]
+}
+
+
