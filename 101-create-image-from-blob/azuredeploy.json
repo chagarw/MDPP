@@ -1,0 +1,90 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": 
+    {
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "crprunner"
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "defaultValue": "crprunner1!"
+        },
+        "numberOfVMInstances": {
+            "type": "int",
+            "defaultValue": 2
+        },
+        "region": {
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "type": "string"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_A2"
+        },
+        "addressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16"
+        },
+        "subnet1Name": {
+            "type": "string",
+            "defaultValue": "Subnet-1"
+        },
+        "subnet2Name": {
+            "type": "string",
+            "defaultValue": "Subnet-2"
+        },
+        "subnet1Prefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/24"
+        },
+        "subnet2Prefix": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24"
+        },
+		"imageName": {
+            "type": "string",
+            "defaultValue": "CRPVMImageTestImage"
+        },
+		"availabilitySetName": {
+			"type": "string",
+            "defaultValue": "CRPVMImageTestAvSet"
+		},
+		"imageOSDiskBlobUri" : {
+            "type": "string",
+        },
+        "windowsOSVersion": {
+            "type": "string",
+			"defaultValue": "2012-R2-Datacenter",
+            "metadata": {
+                "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+            }
+        }
+    },
+    "resources": [
+	{
+            "type": "Microsoft.Compute/images",
+			"apiVersion": "2016-04-30-preview",
+            "name": "[parameters('imageName')]",
+            "location": "[parameters('region')]",
+            "properties": 
+            {
+                "storageProfile": 
+                {
+                    "osDisk" : 
+                    { 
+                        "osType" : "windows",
+			"osState": "Generalized",
+			"blobUri": "[parameters('imageOSDiskBlobUri')]",
+			"caching": "ReadWrite",
+			"storageAccountType": "Standard_LRS"
+                    }
+                }
+            }
+        }
+    ]
+}
+
