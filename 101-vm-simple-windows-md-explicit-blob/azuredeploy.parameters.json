@@ -10,6 +10,9 @@
         },
         "dnsNameForPublicIP": {
             "value": "uniqueDNS"
+        },
+	"imageOSDiskBlobUri" : {
+            "value": "sourceOSBlobUri"
         }
    }
 }

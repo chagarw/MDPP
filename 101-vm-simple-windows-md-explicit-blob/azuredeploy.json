@@ -20,6 +20,9 @@
                   "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
             }
         },
+	"imageOSDiskBlobUri" : {
+            "type": "string",
+        },
         "windowsOSVersion": {
             "type": "string",
             "defaultValue": "2012-R2-Datacenter",
@@ -63,7 +66,7 @@
 			"creationData": 
 			{
 				"createOption": "Import",
-				"sourceUri": "[concat('https://p1t22585.blob.core.windows.net/vhds/p1t2VM1201652284620.vhd')]" 
+				"sourceUri": "[parameters('imageOSDiskBlobUri')]" 
 			},
 			"accountType": "Standard_LRS",
 			"diskSizeGB": "128"
