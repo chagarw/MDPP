@@ -59,7 +59,7 @@
         "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
         "apiVersion": "2015-06-15",
         "computeResouresApiVersion": "2016-04-30-preview",
-        "dnsLabelPrefix" : "[resourceGroup().name]"
+        "dnsLabelPrefix" : "[toLower(resourceGroup().name)]"
     }
     ,
     "resources": [
