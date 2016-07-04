@@ -1,10 +1,9 @@
-# Very simple deployment of an Windows VM
+# Very simple deployment, which creates an Image from a blob and then an Availability Set with 2 VMs using Azure Managed Disks, creted from that Image.  
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fchagarw%2FMDPP%2Fmaster%2F101-vm-simple-windows-md%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fchagarw%2FMDPP%2Fmaster%2F101-create-image-availabilityset-2vm-from-blob%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
 Built by: [chagarw](https://github.com/chagarw)
 
-This template allows you to deploy a simple Windows VM using a few different options for the Windows version, using the latest patched version. This will deploy in West US on a D1 VM Size.
-
+This allows you to create an Image from a blob and then an Availability Set with 2 VMs using Azure Managed Disks, creted from that Image.  

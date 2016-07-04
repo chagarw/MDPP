@@ -1,7 +1,7 @@
 {
-  "itemDisplayName": "Deploy a simple Windows VM in West US",
-  "description": "This template allows you to deploy a simple Windows VM using a few different options for the Windows version, using the latest patched version. This will deploy in West US on a D1 VM Size.",
-  "summary": "This template takes a minimum amount of parameters and deploys a Windows VM, using the latest patched version.",
-  "githubUsername": "coreysa",
-  "dateUpdated": "2015-04-26"
+  "itemDisplayName": "Deploy a simple creates an Image from a blob and then an Availability Set with 2 VMs using Azure Managed Disks, creted from that Image.",
+  "description": "This template creates an Image from a blob and then an Availability Set with 2 VMs using Azure Managed Disks, created from that Image.",
+  "summary": "This template takes a minimum amount of parameters and deploys an Image and Availability Set with 2 Windows VM, using the that Image and Azure Managed Disks.",
+  "githubUsername": "chagarw",
+  "dateUpdated": "2016-07-03"
 }
