@@ -1,6 +1,6 @@
 # Very simple deployment of an Windows VM
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fchagarw%2FMDPP%2Fmaster%2F101-vm-simple-windows-md%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fchagarw%2FMDPP%2Fblob%2Fmaster%2F101-availabilityset-simple-windows-md-implicit%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
