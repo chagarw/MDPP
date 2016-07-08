@@ -3,67 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": 
     {
-        "adminUsername": {
-            "type": "string"
-        },
-        "adminPassword": {
-            "type": "securestring"
-        },
-        "numberOfVMInstances": {
-            "type": "int",
-            "defaultValue": 2
-        },
         "region": {
             "type": "string"
         },
-        "virtualNetworkName": {
+	"imageName": {
             "type": "string"
         },
-        "vmSize": {
+	"imageOSDiskBlobUri" : {
             "type": "string",
-            "defaultValue": "Standard_A2"
-        },
-        "addressPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/16"
-        },
-        "subnet1Name": {
-            "type": "string",
-            "defaultValue": "Subnet-1"
-        },
-        "subnet2Name": {
-            "type": "string",
-            "defaultValue": "Subnet-2"
-        },
-        "subnet1Prefix": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/24"
-        },
-        "subnet2Prefix": {
-            "type": "string",
-            "defaultValue": "10.0.1.0/24"
-        },
-		"imageName": {
-            "type": "string"
-        },
-		"availabilitySetName": {
-			"type": "string"
-		},
-		"imageOSDiskBlobUri" : {
-            "type": "string",
-        },
-        "windowsOSVersion": {
-            "type": "string",
-			"defaultValue": "2012-R2-Datacenter",
-            "metadata": {
-                "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
-            }
         }
     },
     "resources": [
 	{
             "type": "Microsoft.Compute/images",
-			"apiVersion": "2016-04-30-preview",
+	    "apiVersion": "2016-04-30-preview",
             "name": "[parameters('imageName')]",
             "location": "[parameters('region')]",
             "properties": 
