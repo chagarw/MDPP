@@ -2,6 +2,10 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "numberOfVMInstances": {
+      "type": "int",
+      "defaultValue": 2
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -29,24 +33,23 @@
         "2012-R2-Datacenter"
       ],
       "metadata": {
-        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version. Allowed values: 2008-R2-SP1, 2012-Datacenter, 2012-R2-Datacenter."
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version. Allowed values: 2008-R2-SP1, 2012-Datacenter, sku."
       }
     }
   },
   "variables": {
-    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
-    "virtualNetworkName": "MyVNET",
-    "addressPrefix": "10.0.0.0/16",
-    "subnetName": "Subnet",
-    "subnetPrefix": "10.0.0.0/24",
-    "publicIPAddressName": "myPublicIP",
-    "publicIPAddressType": "Dynamic",
-    "nicName": "myVMNic",
-    "sizeOfDiskInGB": "100",
+    "location": "[resourceGroup().location]",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
+    "nicName": "mynic",
+    "addressPrefix": "10.0.0.0/8",
+    "subnetName": "Subnet11",
+    "subnetPrefix": "10.0.0.0/16",
+    "publicIPAddressName": "myip",
+    "publicIPAddressType": "Dynamic",
     "vmName": "mdWindowsVM",
-    "vmSize": "Standard_D1_V2",
+    "vmSize": "Standard_DS1_V2",
+    "virtualNetworkName": "myvnet",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "apiVersion": "2015-06-15",
@@ -54,31 +57,10 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "apiVersion": "[variables('apiVersion')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "accountType": "Standard_LRS"
-      }
-    },
-    {
-      "apiVersion": "[variables('apiVersion')]",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-        "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
-        }
-      }
-    },
-    {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -96,12 +78,43 @@
       }
     },
     {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "availabilitySet1",
+      "apiVersion": "[variables('computeResouresApiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "platformFaultDomainCount": "2",
+        "platformUpdateDomainCount": "2",
+        "managed": "true"
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(variables('publicIPAddressName'), copyindex())]",
+      "location": "[variables('location')]",
+      "copy": {
+        "name": "publicIPLoop",
+        "count": "[parameters('numberOfVMInstances')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[concat(parameters('dnsLabelPrefix'), copyindex())]"
+        }
+      }
+    },
+    {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
-      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('nicName'), copyindex())]",
+      "location": "[variables('location')]",
+      "copy": {
+        "name": "nicLoop",
+        "count": "[parameters('numberOfVMInstances')]"
+      },
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'), copyindex())]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
       ],
       "properties": {
@@ -111,7 +124,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('publicIPAddressName'), copyindex()))]"
               },
               "subnet": {
                 "id": "[variables('subnetRef')]"
@@ -124,19 +137,26 @@
     {
       "apiVersion": "[variables('computeResouresApiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[variables('vmName')]",
-      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('vmName'), copyindex())]",
+      "location": "[variables('location')]",
+	  "tags": {"Tag1": "ManagedVM"},
+	  "copy": {
+        "name": "VMLoop",
+        "count": "[parameters('numberOfVMInstances')]"
+      },
       "tags": {"Tag1": "ManagedVM"},
       "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyindex())]"
       ],
       "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', 'availabilitySet1')]"
+        },
         "hardwareProfile": {
           "vmSize": "[variables('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[variables('vmName')]",
+          "computerName": "[concat(variables('vmName'), copyindex())]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -144,29 +164,23 @@
           "imageReference": {
             "publisher": "[variables('imagePublisher')]",
             "offer": "[variables('imageOffer')]",
-            "sku": "[parameters('windowsOSVersion')]",
+            "sku": "[variables('windowsOSVersion')]",
             "version": "latest"
           },
           "dataDisks": [
             {
-              "diskSizeGB": "[variables('sizeOfDiskInGB')]",
               "lun": 0,
-              "createOption": "Empty"
+              "createOption": "Empty",
+              "diskSizeGB": 1023
             }
           ]
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'), copyindex()))]"
             }
           ]
-        },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": "true",
-            "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
-          }
         }
       }
     }

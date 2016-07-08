@@ -37,7 +37,7 @@
     "publicIPAddressName": "myip",
     "publicIPAddressType": "Dynamic",
     "vmName": "mdLinuxVM",
-    "vmSize": "Standard_A1",
+    "vmSize": "Standard_D2_V2",
     "virtualNetworkName": "myvnet",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
@@ -142,7 +142,7 @@
         "name": "VMLoop",
         "count": "[parameters('numberOfVMInstances')]"
       },
-	  "tags": {"Tag1": "ManagedVM"},
+      "tags": {"Tag1": "ManagedVM"},
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyindex())]",
 		"[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
