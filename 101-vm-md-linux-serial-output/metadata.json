@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a simple Azure managed disk Linux VM",
+  "description": "This template allows you to deploy a simple Linux VM using Azure Managed Disk.",
+  "summary": "This template takes a minimum amount of parameters and deploys a VM using Azure Managed Disk.",
+  "githubUsername": "prashmo",
+  "dateUpdated": "2016-07-08"
+}
