@@ -3,12 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "adminUsername": {
-            "type": "string",
-            "defaultValue": "crprunner"
+            "type": "string"
         },
         "adminPassword": {
-            "type": "securestring",
-            "defaultValue": "crprunner1!"
+            "type": "securestring"
         },
         "numberOfVMInstances": {
             "type": "int",
@@ -45,12 +43,10 @@
             "defaultValue": "10.0.1.0/24"
         },
 		"imageName": {
-            "type": "string",
-            "defaultValue": "CRPVMImageTestImage"
+            "type": "string"
         },
 		"availabilitySetName": {
-			"type": "string",
-            "defaultValue": "CRPVMImageTestAvSet"
+			"type": "string"
 		},
 		"imageOSDiskBlobUri" : {
             "type": "string",
