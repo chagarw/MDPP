@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy Azure managed disk Windows Virtual Machines in an Availability Set.",
+  "description": "This template allows you to deploy Azure managed disk Windows Virtual Machines in an Availability Set.",
+  "summary": "This template takes a minimum amount of parameters and deploysAzure managed disk Windows Virtual Machines in an Availability Set.",
+  "githubUsername": "prashmo",
+  "dateUpdated": "2016-07-08"
+}

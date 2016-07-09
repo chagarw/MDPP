@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy Azure Managed Disk Linux Virtual Machines in a Availability Set.",
+  "description": "This template allows you to deploy Azure Managed Disk Linux Virtual Machines in a Availability Set.",
+  "summary": "This template takes a minimum amount of parameters and deploys Azure Managed Disk Linux Virtual Machines in a Availability Set.",
+  "githubUsername": "prashmo",
+  "dateUpdated": "2016-07-08"
+}
