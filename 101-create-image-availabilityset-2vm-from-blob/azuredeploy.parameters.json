@@ -12,7 +12,7 @@
 		"value": "azureRegion"
 	},
 	"virtualNetworkName": {
-		"value": "imageName"
+		"value": "virtNetworkName"
 	},
 	"imageOSDiskBlobUri" : {
 		"value": "sourceOSBlobUri"		
