@@ -43,18 +43,18 @@
             "defaultValue": "10.0.1.0/24"
         },
 	"imageName": {
-            "type": "string"
+            "type": "string",
             "defaultValue": "myImage"
         },
 	"availabilitySetName": {
-	    "type": "string"
+	    "type": "string",
             "defaultValue": "myAvailSet"
 	},
 	"imageOSDiskBlobUri" : {
-            "type": "string",
+            "type": "string"
         },
 	"imageDataDisk0BlobUri" : {
-	    "type": "string",
+	    "type": "string"
 	},
         "windowsOSVersion": {
             "type": "string",
