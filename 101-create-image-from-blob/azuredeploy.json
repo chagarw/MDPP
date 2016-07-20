@@ -10,7 +10,7 @@
             "type": "string"
         },
 	"imageOSDiskBlobUri" : {
-            "type": "string",
+            "type": "string"
         }
     },
     "resources": [
