@@ -156,11 +156,10 @@
             "creationData":
             {
                 "createOption": "Import",
-				"sourceUri": "[parameters('sourceDataDiskBlobUri')]" 
+		"sourceUri": "[parameters('sourceDataDiskBlobUri')]" 
             }
             ,
-            "accountType" : "[variables('storageAccountType')]",
-            "diskSizeGB": 64
+            "accountType" : "[variables('storageAccountType')]"
         }
     }
     ,
@@ -174,11 +173,10 @@
             "creationData":
             {
                 "createOption": "Import",
-				"sourceUri": "[parameters('sourceDataDiskBlobUri')]" 
+		"sourceUri": "[parameters('sourceDataDiskBlobUri')]" 
             }
             ,
-            "accountType" : "[variables('storageAccountType')]",
-            "diskSizeGB": 128
+            "accountType" : "[variables('storageAccountType')]"
         }
     }
     ,
