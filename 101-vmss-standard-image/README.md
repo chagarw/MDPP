@@ -4,7 +4,7 @@
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
-Built by: [negat](https://github.com/negat)
+Built by: [negat](https://github.com/gatneil)
 
 This template allows you to deploy a simple VM Scale Set using Azure Managed Disk. 
 
