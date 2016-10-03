@@ -1,5 +1,5 @@
 {
-  "itemDisplayName": "Deploy a simple VM Scale Set using managed disks",
+  "itemDisplayName": "Deploy a simple Ubuntu Linux based VM Scale Set using managed disks",
   "description": "This template allows you to deploy a simple VM Scale Set using Azure Managed Disk.",
   "summary": "This template takes a minimum amount of parameters and deploys a VM Scale Set using Azure Managed Disk.",
   "githubUsername": "negat",
