@@ -9,16 +9,6 @@
 		"description": "Size of VMs in the VM Scale Set."
 	    }
 	},
-	"ubuntuOSVersion": {
-	    "type": "string",
-	    "defaultValue": "14.04.4-LTS",
-	    "allowedValues": [
-		"14.04.4-LTS"
-	    ],
-	    "metadata": {
-		"description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version. Allowed values are: 14.04.4-LTS."
-	    }
-	},
 	"vmssName":{
 	    "type":"string",
 	    "metadata":{
@@ -44,6 +34,13 @@
 	    "metadata": {
 		"description": "Admin password on all VMs."
 	    }
+	},
+	"customImageUri": {
+	    "type": "string"
+	},
+	"osType": {
+	    "type": "string",
+	    "allowedValues": ["Windows", "Linux"]
 	}
     },
     "variables": {
@@ -52,6 +49,7 @@
 	"vhdContainerName": "[concat(variables('namingInfix'), 'vhd')]",
 	"addressPrefix": "10.0.0.0/16",
 	"subnetPrefix": "10.0.0.0/24",
+	"imageName": "[concat(variables('namingInfix'), 'img')]",
 	"virtualNetworkName": "[concat(variables('namingInfix'), 'vnet')]",
 	"publicIPAddressName": "[concat(variables('namingInfix'), 'pip')]",
 	"subnetName": "[concat(variables('namingInfix'), 'subnet')]",
@@ -66,17 +64,27 @@
 	"nicName": "[concat(variables('namingInfix'), 'nic')]",
 	"ipConfigName": "[concat(variables('namingInfix'), 'ipconfig')]",
 	"frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
-	"osType": {
-	    "publisher": "Canonical",
-	    "offer": "UbuntuServer",
-	    "sku": "[parameters('ubuntuOSVersion')]",
-	    "version": "latest"
-	},
-	"imageReference": "[variables('osType')]",
 	"computeApiVersion": "2016-04-30-preview",
 	"networkApiVersion": "2016-03-30"
     },
     "resources": [
+	{
+	    "type": "Microsoft.Compute/images",
+	    "apiVersion": "2016-04-30-preview",
+	    "name": "[variables('imageName')]",
+	    "location": "[resourceGroup().location]",
+	    "properties": {
+		"storageProfile": {
+		    "osDisk" : {
+			"osType" : "[parameters('osType')]",
+			"osState": "Generalized",
+			"blobUri": "[parameters('customImageUri')]",
+			"caching": "ReadWrite",
+			"storageAccountType": "Standard_LRS"
+		    }
+		}
+	    }
+	},
 	{
 	    "type": "Microsoft.Network/virtualNetworks",
 	    "name": "[variables('virtualNetworkName')]",
@@ -171,11 +179,9 @@
 		},
 		"virtualMachineProfile": {
 		    "storageProfile": {
-			"osDisk": {
-			    "createOption": "FromImage",
-			    "diskSizeGB": "100"
-			},
-			"imageReference": "[variables('imageReference')]"
+			"imageReference": {
+			    "id": "[resourceId('Microsoft.Compute/images', variables('imageName'))]"
+			}
 		    },
 		    "osProfile": {
 			"computerNamePrefix": "[variables('namingInfix')]",
