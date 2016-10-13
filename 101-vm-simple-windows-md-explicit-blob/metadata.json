@@ -1,7 +1,7 @@
 {
-  "itemDisplayName": "Deploy a simple VM from a blob using Azure Managed Disk.",
-  "description": "This template allows you to deploy a simple VM using Azure Managed Disk, from a blob.",
-  "summary": "This template takes a minimum amount of parameters and deploys a VM using Azure Managed Disk, from a blob.",
+  "itemDisplayName": "Deploy a simple VM from a specialized (not syspreped) blob using Azure Managed Disk.",
+  "description": "This template allows you to deploy a simple VM using Azure Managed Disk, from a specialized (not syspreped) blob.",
+  "summary": "This template takes a minimum amount of parameters and deploys a VM using Azure Managed Disk, from a specialized (not syspreped) blob.",
   "githubUsername": "chagarw",
-  "dateUpdated": "2016-07-03"
+  "dateUpdated": "2016-10-13"
 }

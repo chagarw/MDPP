@@ -1,7 +1,7 @@
 {
-  "itemDisplayName": "Deploy a simple Windows VM with two Data Disks, created from a blob",
-  "description": "This template allows you to deploy a simple Windows VM with two Data Disks using Azure Managed Disks, created from a blob.",
-  "summary": "This template takes a minimum amount of parameters and deploys a Windows VM with two Data Disks using Azure Managed Disks, created from a blob.",
+  "itemDisplayName": "Deploy a simple Windows VM with two Data Disks, created from a specialized (not syspreped) blob",
+  "description": "This template allows you to deploy a simple Windows VM with two Data Disks using Azure Managed Disks, created from a specialized (not syspreped) blob.",
+  "summary": "This template takes a minimum amount of parameters and deploys a Windows VM with two Data Disks using Azure Managed Disks, created from a specialized (not syspreped) blob.",
   "githubUsername": "chagarw",
-  "dateUpdated": "2016-09-07"
+  "dateUpdated": "2016-10-13"
 }
