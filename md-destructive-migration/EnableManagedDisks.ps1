@@ -3,7 +3,7 @@
 #    The migration will happen by deleting the VM (but not the VHD files) and recreating the VMs so the disks are imported to Managed Disks service.
 #    After running this script successfully, the disks underneath the VMs will be migrated to Managed Disks with everything else unchanged.
 #
-# Version 1.01   2016-11-28
+# Version 1.02   2016-11-29
 #
 
 Param
@@ -11,7 +11,9 @@ Param
     [Parameter(Mandatory=$true)]
 	[string]$ResourceGroupName,   # Resource Group containing VMs to move to Managed Disks
     [Parameter(Mandatory=$true)]
-    [string]$SubscriptionID       # subscription ID
+    [string]$SubscriptionID,       # subscription ID
+    [Parameter(Mandatory=$false)]
+    [switch]$AllowTemplateChanges = $false  # Set this flag to pause the script, prompt, and allow the user to manually update the template before final deployment. Use this to enable scenarios like upgrading from standard blob storage to Managed Disks premium storage -- for example. To upgrade, see README.md.
 )
 
 $global:ScriptStartTime = (Get-Date -Format hh-mm-ss.ff)
@@ -78,6 +80,18 @@ try
    .\EnableMD.exe $fileName $vmsList
     
     Write-Log "Created a modified template: $newFileName." 
+
+    if ($AllowTemplateChanges)
+    {
+        Write-Log "Look for a Message Box prompt that may be behind other windows. Pausing script to allow a user to modify the template file $newFileName before deployment. Modify and save this file if further custom changes are desired. For example, use this feature to upgrade to Managed Disks Premium Storage (from standard unmanaged blob storage). To upgrade from standard unmanaged blob storage to managed premium storage, see further instructions in the README.md." -color Yellow
+        $msg = "Pausing script to allow a user to modify the template file $newFileName before deployment. Modify and save this file if further custom changes are desired. For example, use this feature to upgrade to Managed Disks Premium Storage (from standard unmanaged blob storage). To upgrade from standard unmanaged blob storage to managed premium storage, see further instructions in the README.md."
+        $out = [System.Windows.Forms.MessageBox]::Show($msg, "Yes-Continue with Deployment, or No-ExitScript and cancel changes?" , 4) 
+        if ($out -eq "No" ) 
+        {
+            Exit 
+        }
+    }
+     
     Write-Log "Deleting the VMs in the RG. This will take some time..." 
     
     foreach ($vm in $vms)
