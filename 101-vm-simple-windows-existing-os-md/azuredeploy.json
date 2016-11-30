@@ -43,7 +43,6 @@
         "computeResouresApiVersion" : "2016-04-30-preview"
     },
     "resources": [
-    { 
         {
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/publicIPAddresses",
@@ -135,6 +134,5 @@
                 }
             }
         }
-      }
     ]
 }
