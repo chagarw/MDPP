@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Creates a VM attaching an existing Azure Managed OS Disk.",
+  "description": "This template allows you to create a simple VM using an existing Azure Managed OS Disk.",
+  "summary": "This template allows you to create a simple VM using an existing Azure Managed OS Disk.",
+  "githubUsername": "SudhakaraReddyEvuri",
+  "dateUpdated": "2016-11-30"
+}
