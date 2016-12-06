@@ -164,6 +164,7 @@
 	    "location": "[resourceGroup().location]",
 	    "apiVersion": "[variables('computeApiVersion')]",
 	    "dependsOn": [
+		"[concat('Microsoft.Compute/images/', variables('imageName'))]",
 		"[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
 		"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
 	    ],
