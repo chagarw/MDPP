@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Create an Image from a generalized (syspreped) blob",
+  "description": "This template allows you to create an Image from a generalized (syspreped) blob in your storage account.",
+  "summary": "This template takes a minimum amount of parameters and creates an Image.",
+  "githubUsername": "chagarw",
+  "dateUpdated": "2016-10-13"
+}
