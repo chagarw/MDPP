@@ -173,7 +173,7 @@
 		    "storageProfile": {
 			"osDisk": {
 			    "createOption": "FromImage",
-			    "diskSizeGB": "100"
+			    "caching": "ReadOnly"
 			},
 			"imageReference": "[variables('imageReference')]",
 			"dataDisks": [
