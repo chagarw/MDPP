@@ -51,7 +51,7 @@
             "type": "Microsoft.Compute/images",
 	    "apiVersion": "2016-04-30-preview",
             "name": "[parameters('imageName')]",
-            "location": "[parameters('location')]",
+            "location": "[variables('location')]",
             "properties": 
             {
                 "storageProfile": 
