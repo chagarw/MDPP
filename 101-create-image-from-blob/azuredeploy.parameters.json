@@ -5,7 +5,7 @@
 	"region": {
 		"value": "regionName"
 	},
-	"virtualNetworkName": {
+	"imageName": {
 		"value": "ImageName"
 	},
 	"imageOSDiskBlobUri" : {
